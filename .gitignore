@@ -39,3 +39,8 @@ out/
 *.zip
 *.tar.gz
 *.rar
+
+.allure/
+data/
+data_mysql/
+data_postgres/
