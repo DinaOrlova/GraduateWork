@@ -72,7 +72,7 @@ public class CreditGateTest {
         val startPage = new StartPage();
         val creditPage = startPage.selectCredit();
         creditPage.fillData(DataHelper.getCardWithoutNumber());
-        creditPage.shouldGiveFieldErrorWhenIncorrectFormat();
+        creditPage.shouldGiveFieldErrorWhenRequiredField();
         assertEquals(0, SqlHelper.getOrderCount());
     }
 
@@ -81,7 +81,7 @@ public class CreditGateTest {
         val startPage = new StartPage();
         val creditPage = startPage.selectCredit();
         creditPage.fillData(DataHelper.getCardWithoutMonth());
-        creditPage.shouldGiveFieldErrorWhenIncorrectFormat();
+        creditPage.shouldGiveFieldErrorWhenRequiredField();
         assertEquals(0, SqlHelper.getOrderCount());
     }
 
@@ -117,7 +117,7 @@ public class CreditGateTest {
         val startPage = new StartPage();
         val creditPage = startPage.selectCredit();
         creditPage.fillData(DataHelper.getCardWithoutYear());
-        creditPage.shouldGiveFieldErrorWhenIncorrectFormat();
+        creditPage.shouldGiveFieldErrorWhenRequiredField();
         assertEquals(0, SqlHelper.getOrderCount());
     }
 
@@ -216,7 +216,7 @@ public class CreditGateTest {
         val startPage = new StartPage();
         val creditPage = startPage.selectCredit();
         creditPage.fillData(DataHelper.getCardWithoutCVV());
-        creditPage.shouldGiveFieldErrorWhenIncorrectFormat();
+        creditPage.shouldGiveFieldErrorWhenRequiredField();
         assertEquals(0, SqlHelper.getOrderCount());
     }
 
@@ -235,6 +235,45 @@ public class CreditGateTest {
         val creditPage = startPage.selectCredit();
         creditPage.fillData(DataHelper.getCardWith000CVV());
         creditPage.shouldGiveFieldErrorWhenIncorrectCVV();
+        assertEquals(0, SqlHelper.getOrderCount());
+    }
+
+    @Test
+    void shouldNotCreditFromCardWithLastMonthCurrentYear() {
+        val startPage = new StartPage();
+        val creditPage = startPage.selectCredit();
+        creditPage.fillData(DataHelper.getCardWithLastMonthCurrentYear());
+        creditPage.shouldGiveFieldErrorWhenCardExpired();
+        assertEquals(0, SqlHelper.getOrderCount());
+    }
+
+    @Test
+    void shouldNotCreditFromCardWithPlus1MonthPlus5Year() {
+        val startPage = new StartPage();
+        val creditPage = startPage.selectCredit();
+        creditPage.fillData(DataHelper.getCardWithPlus1MonthPlus5Year());
+        creditPage.shouldGiveFieldErrorWhenIncorrectCardExpirationDate();
+        assertEquals(0, SqlHelper.getOrderCount());
+    }
+
+    @Test
+    void shouldNotBeVisibleFieldError() {
+        val startPage = new StartPage();
+        val creditPage = startPage.selectCredit();
+        creditPage.fillData(DataHelper.getEmptyCard());
+        creditPage.shouldGiveFieldError();
+        creditPage.fillData(DataHelper.getApprovedCard());
+        creditPage.shouldNotGiveFieldError();
+        assertEquals(0, SqlHelper.getOrderCount());
+    }
+
+    @Test
+    void shouldNotBeVisibleSuccessMessage() {
+        val startPage = new StartPage();
+        val creditPage = startPage.selectCredit();
+        creditPage.fillData(DataHelper.getInvalidCardNumber());
+        creditPage.shouldGiveErrorMessage();
+        creditPage.shouldNotBeVisibleSuccessMessage();
         assertEquals(0, SqlHelper.getOrderCount());
     }
 }

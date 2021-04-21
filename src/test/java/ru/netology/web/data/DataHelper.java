@@ -14,7 +14,7 @@ public class DataHelper {
     }
 
     public static String selectMonthLessThanCurrent(int months) {
-        LocalDate validity = LocalDate.now().plusMonths(months);
+        LocalDate validity = LocalDate.now().minusMonths(months);
         String validityMonth = validity.toString().substring(5, 7);
         return validityMonth;
     }
@@ -173,5 +173,19 @@ public class DataHelper {
     public static Card getCardWith000CVV() {
         return new Card("4444 4444 4444 4441", selectCurrentMonthOrMoreThanCurrent(2),
                 selectCurrentYearOrMoreThanCurrent(2), owner(), "000");
+    }
+
+    public static Card getCardWithLastMonthCurrentYear() {
+        return new Card("4444 4444 4444 4441", selectMonthLessThanCurrent(1),
+                selectCurrentYearOrMoreThanCurrent(0), owner(), codeCVV());
+    }
+
+    public static Card getCardWithPlus1MonthPlus5Year() {
+        return new Card("4444 4444 4444 4441", selectCurrentMonthOrMoreThanCurrent(1),
+                selectCurrentYearOrMoreThanCurrent(5), owner(), codeCVV());
+    }
+
+    public static Card getEmptyCard() {
+        return new Card("", "", "", "", "");
     }
 }

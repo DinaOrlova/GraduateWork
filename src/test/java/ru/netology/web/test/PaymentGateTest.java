@@ -72,7 +72,7 @@ public class PaymentGateTest {
         val startPage = new StartPage();
         val paymentPage = startPage.selectPayment();
         paymentPage.fillData(DataHelper.getCardWithoutNumber());
-        paymentPage.shouldGiveFieldErrorWhenIncorrectFormat();
+        paymentPage.shouldGiveFieldErrorWhenRequiredField();
         assertEquals(0, SqlHelper.getOrderCount());
     }
 
@@ -81,7 +81,7 @@ public class PaymentGateTest {
         val startPage = new StartPage();
         val paymentPage = startPage.selectPayment();
         paymentPage.fillData(DataHelper.getCardWithoutMonth());
-        paymentPage.shouldGiveFieldErrorWhenIncorrectFormat();
+        paymentPage.shouldGiveFieldErrorWhenRequiredField();
         assertEquals(0, SqlHelper.getOrderCount());
     }
 
@@ -117,7 +117,7 @@ public class PaymentGateTest {
         val startPage = new StartPage();
         val paymentPage = startPage.selectPayment();
         paymentPage.fillData(DataHelper.getCardWithoutYear());
-        paymentPage.shouldGiveFieldErrorWhenIncorrectFormat();
+        paymentPage.shouldGiveFieldErrorWhenRequiredField();
         assertEquals(0, SqlHelper.getOrderCount());
     }
 
@@ -216,7 +216,7 @@ public class PaymentGateTest {
         val startPage = new StartPage();
         val paymentPage = startPage.selectPayment();
         paymentPage.fillData(DataHelper.getCardWithoutCVV());
-        paymentPage.shouldGiveFieldErrorWhenIncorrectFormat();
+        paymentPage.shouldGiveFieldErrorWhenRequiredField();
         assertEquals(0, SqlHelper.getOrderCount());
     }
 
@@ -235,6 +235,45 @@ public class PaymentGateTest {
         val paymentPage = startPage.selectPayment();
         paymentPage.fillData(DataHelper.getCardWith000CVV());
         paymentPage.shouldGiveFieldErrorWhenIncorrectCVV();
+        assertEquals(0, SqlHelper.getOrderCount());
+    }
+
+    @Test
+    void shouldNotPayFromCardWithLastMonthCurrentYear() {
+        val startPage = new StartPage();
+        val paymentPage = startPage.selectPayment();
+        paymentPage.fillData(DataHelper.getCardWithLastMonthCurrentYear());
+        paymentPage.shouldGiveFieldErrorWhenCardExpired();
+        assertEquals(0, SqlHelper.getOrderCount());
+    }
+
+    @Test
+    void shouldNotPayFromCardWithPlus1MonthPlus5Year() {
+        val startPage = new StartPage();
+        val paymentPage = startPage.selectPayment();
+        paymentPage.fillData(DataHelper.getCardWithPlus1MonthPlus5Year());
+        paymentPage.shouldGiveFieldErrorWhenIncorrectCardExpirationDate();
+        assertEquals(0, SqlHelper.getOrderCount());
+    }
+
+    @Test
+    void shouldNotBeVisibleFieldError() {
+        val startPage = new StartPage();
+        val paymentPage = startPage.selectPayment();
+        paymentPage.fillData(DataHelper.getEmptyCard());
+        paymentPage.shouldGiveFieldError();
+        paymentPage.fillData(DataHelper.getApprovedCard());
+        paymentPage.shouldNotGiveFieldError();
+        assertEquals(0, SqlHelper.getOrderCount());
+    }
+
+    @Test
+    void shouldNotBeVisibleSuccessMessage() {
+        val startPage = new StartPage();
+        val paymentPage = startPage.selectPayment();
+        paymentPage.fillData(DataHelper.getInvalidCardNumber());
+        paymentPage.shouldGiveErrorMessage();
+        paymentPage.shouldNotBeVisibleSuccessMessage();
         assertEquals(0, SqlHelper.getOrderCount());
     }
 }

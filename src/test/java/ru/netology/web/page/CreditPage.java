@@ -42,12 +42,12 @@ public class CreditPage {
     }
 
     public void shouldGiveFieldErrorWhenIncorrectCardExpirationDate() {
-        fieldError.shouldHave(Condition.text("Неверно указан срок действия карт"))
+        fieldError.shouldHave(Condition.text("Неверно указан срок действия карты"))
                 .shouldBe(visible, Duration.ofMillis(15000));
     }
 
     public void shouldGiveFieldErrorWhenCardExpired() {
-        fieldError.shouldHave(Condition.text("Истек срок действия карты")).shouldBe(visible, Duration.ofMillis(15000));
+        fieldError.shouldHave(Condition.text("Истёк срок действия карты")).shouldBe(visible, Duration.ofMillis(15000));
     }
 
     public void shouldGiveFieldErrorWhenRequiredField() {
@@ -70,6 +70,14 @@ public class CreditPage {
                 .shouldBe(visible, Duration.ofMillis(15000));
     }
 
+    public void shouldGiveFieldError() {
+        fieldError.shouldBe(visible, Duration.ofMillis(15000));
+    }
+
+    public void shouldNotGiveFieldError() {
+        fieldError.shouldNotBe(visible, Duration.ofMillis(15000));
+    }
+
     public void shouldGiveErrorMessage() {
         errorMessage.shouldBe(visible, Duration.ofMillis(15000));
     }
@@ -78,7 +86,7 @@ public class CreditPage {
         successMessage.shouldBe(visible, Duration.ofMillis(15000));
     }
 
-    public void ShouldNotBeVisibleSuccessMessage() {
+    public void shouldNotBeVisibleSuccessMessage() {
         closeMessage.click();
         successMessage.shouldNotBe(visible, Duration.ofMillis(15000));
     }
