@@ -20,6 +20,7 @@ public class CreditPage {
     private SelenideElement codeCVV = $(withText("CVC/CVV")).parent().$(".input__control");
     private SelenideElement continueButton = $$("button").find(exactText("Продолжить"));
     private SelenideElement fieldError = $(".input_invalid .input__sub");
+    private SelenideElement fieldErrorForCVV = $(withText("CVC/CVV")).parent().$(".input__sub");
     private SelenideElement errorMessage = $(".notification_status_error");
     private SelenideElement successMessage = $(".notification_status_ok");
     private SelenideElement closeMessage = $(".notification__closer");
@@ -52,6 +53,11 @@ public class CreditPage {
 
     public void shouldGiveFieldErrorWhenRequiredField() {
         fieldError.shouldHave(Condition.text("Поле обязательно для заполнения"))
+                .shouldBe(visible, Duration.ofMillis(15000));
+    }
+
+    public void shouldGiveFieldErrorForCVVWhenRequiredField() {
+        fieldErrorForCVV.shouldHave(Condition.text("Поле обязательно для заполнения"))
                 .shouldBe(visible, Duration.ofMillis(15000));
     }
 

@@ -216,7 +216,7 @@ public class CreditGateTest {
         val startPage = new StartPage();
         val creditPage = startPage.selectCredit();
         creditPage.fillData(DataHelper.getCardWithoutCVV());
-        creditPage.shouldGiveFieldErrorWhenRequiredField();
+        creditPage.shouldGiveFieldErrorForCVVWhenRequiredField();
         assertEquals(0, SqlHelper.getOrderCount());
     }
 

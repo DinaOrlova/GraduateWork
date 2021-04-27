@@ -216,7 +216,7 @@ public class PaymentGateTest {
         val startPage = new StartPage();
         val paymentPage = startPage.selectPayment();
         paymentPage.fillData(DataHelper.getCardWithoutCVV());
-        paymentPage.shouldGiveFieldErrorWhenRequiredField();
+        paymentPage.shouldGiveFieldErrorForCVVWhenRequiredField();
         assertEquals(0, SqlHelper.getOrderCount());
     }
 
